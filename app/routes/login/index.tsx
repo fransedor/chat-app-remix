@@ -1,7 +1,6 @@
 import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { getSession, commitSession } from "../../utils/session.server";
-import { createNewUser } from "~/repository/user/createNewUser";
 import { getUserByUsername } from "~/repository/user/getUserByUsername";
 import bcrypt from "bcrypt";
 
@@ -22,36 +21,39 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ error: "Invalid password" }, { status: 400 });
   }
 
-  const hashedPassword = bcrypt.hashSync(password as string, 10);
-
   if (typeof username !== "string" || typeof password !== "string") {
     return json({ error: "Invalid form data" }, { status: 400 });
   }
 
   const users = await getUserByUsername(username);
 
-  if (users.length) {
-    return json({ error: "Username already exists" }, { status: 400 });
+  if (!users.length) {
+    return json({ error: "User does not exists" }, { status: 404 });
   }
 
-  const userId = await createNewUser(username, hashedPassword);
-  const session = await getSession();
-  session.set("userId", userId);
+  const userPassword = users[0].password;
 
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
+  if (bcrypt.compareSync(password, userPassword)) {
+    const session = await getSession();
+    session.set("userId", users[0].id);
+
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  } else {
+    return json({ error: "Invalid user" }, { status: 400 });
+  }
 };
 
-export default function Register() {
+export default function Login() {
   const actionData = useActionData<typeof action>();
 
   return (
-    <div>
-      <h1>Register</h1>
-      <Form method="post">
+    <Form method="post">
+      <div>
+        <h1>Login</h1>
         <div>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" id="username" required />
@@ -61,8 +63,8 @@ export default function Register() {
           <input type="password" name="password" id="password" required />
         </div>
         {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-        <button type="submit">Register</button>
-      </Form>
-    </div>
+        <button type="submit">Login</button>
+      </div>
+    </Form>
   );
 }

@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+	font-family: Arial, sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background: #f0f0f0;
+}
+
+h1 {
+	font-size: x-large;
+	font-weight: bold;
+}
+
+#message-container {
+	flex: 1;
+	padding: 10px;
+	overflow-y: auto;
+	border-bottom: 1px solid #ddd;
+}
+
+input {
+	border: none;
+	padding: 10px;
+	width: calc(100% - 20px);
+}
+
+button {
+	padding: 10px;
+	background: #007bff;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}

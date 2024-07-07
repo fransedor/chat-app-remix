@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
-import globalStylesUrl from './styles/global.css?url';
+import globalStylesUrl from './tailwind.css?url';
 
 export const links = () => [{ rel: 'stylesheet', href: globalStylesUrl }];
 
