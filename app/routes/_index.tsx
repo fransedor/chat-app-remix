@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const socket = io();
+const socket = io("http://localhost:3000");
 
 export default function Index() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -18,6 +18,7 @@ export default function Index() {
   }, []);
 
   const sendMessage = () => {
+		console.log("sending message")
     socket.emit('sendMessage', message);
     setMessage('');
   };

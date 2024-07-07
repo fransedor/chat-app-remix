@@ -1,5 +1,5 @@
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
-import globalStylesUrl from './styles/global.css';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import globalStylesUrl from './styles/global.css?url';
 
 export const links = () => [{ rel: 'stylesheet', href: globalStylesUrl }];
 
@@ -14,7 +14,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   );
