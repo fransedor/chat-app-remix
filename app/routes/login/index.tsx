@@ -3,6 +3,7 @@ import { Form, useActionData } from "@remix-run/react";
 import { getSession, commitSession } from "../../utils/session.server";
 import { getUserByUsername } from "~/repository/user/getUserByUsername";
 import bcrypt from "bcrypt";
+import { LoginForm } from "@/components/component/login-form";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("cookie"));
@@ -49,22 +50,10 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Login() {
   const actionData = useActionData<typeof action>();
-
+  const error = actionData?.error;
   return (
     <Form method="post">
-      <div>
-        <h1>Login</h1>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input type="text" name="username" id="username" required />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" required />
-        </div>
-        {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-        <button type="submit">Login</button>
-      </div>
+      <LoginForm error={error} />
     </Form>
   );
 }
