@@ -1,7 +1,9 @@
 import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { registerUser, userExists } from "../../utils/user.server";
 import { getSession, commitSession } from "../../utils/session.server";
+import { createNewUser } from "~/repository/user/createNewUser";
+import { getUserByUsername } from "~/repository/user/getUserByUsername";
+import bcrypt from "bcrypt";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -17,17 +19,25 @@ export const action: ActionFunction = async ({ request }) => {
   const username = formData.get("username");
   const password = formData.get("password");
 
+  if (!password) {
+    return json({ error: "Invalid password" }, { status: 400 });
+  }
+
+  const hashedPassword = bcrypt.hashSync(password as string, 10);
+
   if (typeof username !== "string" || typeof password !== "string") {
     return json({ error: "Invalid form data" }, { status: 400 });
   }
 
-  if (await userExists(username)) {
+  const users = await getUserByUsername(username);
+
+  if (users.length) {
     return json({ error: "Username already exists" }, { status: 400 });
   }
 
-  const user = await registerUser(username, password);
+  const userId = await createNewUser(username, hashedPassword);
   const session = await getSession();
-  session.set("userId", user.id);
+  session.set("userId", userId);
 
   return redirect("/", {
     headers: {
