@@ -1,4 +1,4 @@
-import Pool from 'pg-pool';
+import Pool from "pg-pool";
 
 const host = process.env.DB_HOST;
 const username = process.env.DB_USERNAME;
@@ -12,7 +12,9 @@ const pool = new Pool({
   password,
   port: Number(port),
   database: dbName,
-	ssl: true,
+  ssl: true,
+  connectionTimeoutMillis: 2000,
 });
 
+pool.on("error", (err) => console.log("Error in pgpool: ", err));
 export const query = (text: string, values?: Array<string>) => pool.query(text, values);
