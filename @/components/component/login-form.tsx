@@ -29,13 +29,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export function LoginForm({ error }: { error: string }) {
+export function LoginForm({ error, type }: { error: string, type: "Login" | "Register" }) {
   return (
     <div className="flex items-center justify-center h-screen">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email and password to access your account.</CardDescription>
+          <CardTitle className="text-2xl">{type}</CardTitle>
+          <CardDescription>Enter your email and password to {type === "Login" ? "access" : "register"} your account.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -49,7 +49,7 @@ export function LoginForm({ error }: { error: string }) {
           {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
         </CardContent>
         <CardFooter>
-          <Button className="w-full" type="submit">Sign in</Button>
+          <Button className="w-full" type="submit">{type === "Login" ? "Sign In" : "Register"}</Button>
         </CardFooter>
       </Card>
     </div>

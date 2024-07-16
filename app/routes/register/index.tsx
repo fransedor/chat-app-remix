@@ -4,6 +4,7 @@ import { getSession, commitSession } from "../../utils/session.server";
 import { createNewUser } from "~/repository/user/createNewUser";
 import { getUserByUsername } from "~/repository/user/getUserByUsername";
 import bcrypt from "bcrypt";
+import { LoginForm } from "@/components/component/login-form";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("cookie"));
@@ -47,22 +48,10 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Register() {
   const actionData = useActionData<typeof action>();
-
+  const error = actionData?.error;
   return (
-    <div>
-      <h1>Register</h1>
-      <Form method="post">
-        <div>
-          <label htmlFor="username">Username</label>
-          <input type="text" name="username" id="username" required />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" required />
-        </div>
-        {actionData?.error && <p style={{ color: "red" }}>{actionData.error}</p>}
-        <button type="submit">Register</button>
-      </Form>
-    </div>
+    <Form method="post">
+      <LoginForm error={error} type="Register" />
+    </Form>
   );
 }

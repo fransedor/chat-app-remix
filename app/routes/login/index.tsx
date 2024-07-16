@@ -53,7 +53,7 @@ export default function Login() {
   const error = actionData?.error;
   return (
     <Form method="post">
-      <LoginForm error={error} />
+      <LoginForm error={error} type="Login" />
     </Form>
   );
 }
