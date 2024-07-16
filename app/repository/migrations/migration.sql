@@ -11,21 +11,21 @@ CREATE TABLE "users" (
 	"role" roles
 );
 
-CREATE TABLE "message" {
+CREATE TABLE "message" (
 	"id" serial PRIMARY KEY,
 	"user_id" int,
 	"room_id" int,
 	"text" varchar,
 	"media_url" varchar,
-	"created_at" timestamp,
-}
+	"created_at" timestamp
+);
 
-CREATE TABLE "room" {
+CREATE TABLE "room" (
 	"id" serial PRIMARY KEY,
-	"name" varchar,
-}
+	"name" varchar
+);
 
-CREATE tABLE "room_users" {
+CREATE tABLE "room_users" (
 	"user_id" int,
 	"room_id" int
-}
+);
