@@ -4,7 +4,7 @@ import SearchIcon from "../icons/Search";
 
 const Searchbar = () => {
   return (
-    <div className="flex items-center gap-2 border-b p-4">
+    <div className="flex items-center gap-2 border-b p-4 h-[77px]">
       <Input
         type="search"
         placeholder="Search users..."

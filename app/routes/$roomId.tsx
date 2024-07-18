@@ -1,4 +1,7 @@
+import ChatHeader from "@/components/component/chat-header";
+import ChatMessage from "@/components/component/chat-message";
 import ChatRoom from "@/components/component/chat-room";
+import NewMessage from "@/components/component/new-message";
 import Searchbar from "@/components/component/searchbar";
 //import { useEffect, useState } from "react";
 //import { io } from "socket.io-client";
@@ -36,10 +39,7 @@ export default function Index() {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center">
-        <p className="text-primary">Select someone to chat with from the list on the left</p>
-      </div>
-      {/*<div className="flex flex-col max-h-screen">
+      <div className="flex flex-col max-h-screen">
         <ChatHeader />
         <div className="flex-1 overflow-auto p-6">
           <div className="grid gap-4">
@@ -54,7 +54,7 @@ export default function Index() {
           </div>
         </div>
         <NewMessage />
-      </div>*/}
+      </div>
     </div>
   );
 }

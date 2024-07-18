@@ -3,11 +3,15 @@ import { Button } from "../ui/button";
 import PhoneIcon from "../icons/Phone";
 import VideoIcon from "../icons/Video";
 import MoveHorizontalIcon from "../icons/MoveHorizontal";
+import ArrowLeftIcon from "../icons/ArrowLeft";
 
 const ChatHeader = () => {
   return (
     <div className="flex sticky top-0 z-50 items-center justify-between border-b bg-muted px-6 py-4">
       <div className="flex items-center gap-3">
+          <a href="/" className="flex">
+            <ArrowLeftIcon className="text-muted-foreground" />
+          </a>
         <Avatar className="h-10 w-10 border">
           <AvatarImage src="/placeholder-user.jpg" />
           <AvatarFallback>JD</AvatarFallback>
