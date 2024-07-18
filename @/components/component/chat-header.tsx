@@ -6,7 +6,7 @@ import MoveHorizontalIcon from "../icons/MoveHorizontal";
 
 const ChatHeader = () => {
   return (
-    <div className="flex items-center justify-between border-b bg-muted/40 px-6 py-4">
+    <div className="flex sticky top-0 z-50 items-center justify-between border-b bg-muted px-6 py-4">
       <div className="flex items-center gap-3">
         <Avatar className="h-10 w-10 border">
           <AvatarImage src="/placeholder-user.jpg" />

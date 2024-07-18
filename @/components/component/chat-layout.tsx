@@ -34,7 +34,7 @@ export function ChatLayout() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col max-h-screen">
         <ChatHeader />
         <div className="flex-1 overflow-auto p-6">
           <div className="grid gap-4">
