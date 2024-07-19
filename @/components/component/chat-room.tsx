@@ -7,7 +7,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
   return (
     <a
       href={`/${roomId}`}
-      className="flex items-center gap-3 rounded-lg bg-muted/50 px-4 py-3 min-w-0 transition-colors hover:bg-muted"
+      className="flex items-start gap-3 rounded-lg bg-muted/50 px-4 py-4 min-w-0 transition-colors hover:bg-muted"
     >
       <Avatar className="h-10 w-10 border">
         <AvatarImage src="/placeholder-user.jpg" />

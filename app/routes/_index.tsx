@@ -1,4 +1,5 @@
-import ChatRoom from "@/components/component/chat-room";
+import ChatContainer from "@/components/component/chat-container";
+import { NewChatDialog } from "@/components/component/new-chat-dialog";
 import Searchbar from "@/components/component/searchbar";
 //import { useEffect, useState } from "react";
 //import { io } from "socket.io-client";
@@ -27,14 +28,13 @@ export default function Index() {
   //};
 
   return (
-    <div className="grid h-screen w-full grid-cols-[300px_1fr] bg-background">
+    <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">
       <div className="flex flex-col border-r bg-background sticky top-0 left-0 max-h-screen">
-        <Searchbar />
-        <div className="flex-1 overflow-auto self-start">
-          <div className="grid gap-2 p-4">
-            <ChatRoom roomId="2" />
-          </div>
+        <div className="flex items-center justify-between border-b pr-2">
+          <Searchbar />
+          <NewChatDialog />
         </div>
+        <ChatContainer chats={[]} />
       </div>
       <div className="flex items-center justify-center">
         <p className="text-primary">Select someone to chat with from the list on the left</p>
