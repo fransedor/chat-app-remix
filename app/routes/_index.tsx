@@ -1,11 +1,24 @@
 import ChatContainer from "@/components/component/chat-container";
 import { NewChatDialog } from "@/components/component/new-chat-dialog";
 import Searchbar from "@/components/component/searchbar";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
 //import { useEffect, useState } from "react";
 //import { io } from "socket.io-client";
 //import LogOutButton from "~/components/LogOutButton";
 
 //const socket = io("http://localhost:3000");
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const urlSearchParams = new URL(request.url).searchParams;
+  const isNewChatDialogOpen = urlSearchParams.get("newchat") === "true";
+
+  //const session = await getSession(request.headers.get("cookie"));
+  //console.log("session", session.);
+  //if (!session.has("userId")) {
+  //  return redirect("/login");
+  //}
+  return json({ isNewChatDialogOpen });
+};
 
 export default function Index() {
   //const [messages, setMessages] = useState<string[]>([]);
@@ -26,6 +39,8 @@ export default function Index() {
   //  socket.emit("sendMessage", message);
   //  setMessage("");
   //};
+
+  //const data = useLoaderData<typeof loader>();
 
   return (
     <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">

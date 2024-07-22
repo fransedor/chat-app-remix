@@ -27,7 +27,6 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   const users = await getUserByUsername(username);
-
   if (!users.length) {
     return json({ error: "User does not exists" }, { status: 404 });
   }
@@ -36,6 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (bcrypt.compareSync(password, userPassword)) {
     const session = await getSession();
+    console.log("curr users", session);
     session.set("userId", users[0].id);
 
     return redirect("/", {

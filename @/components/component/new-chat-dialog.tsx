@@ -17,14 +17,33 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { AddButton } from "./add-button";
+import { DialogProps } from "@radix-ui/react-dialog";
+import { useFetcher } from "@remix-run/react";
 
-export function NewChatDialog() {
+interface NewChatDialogProps extends DialogProps {}
+export function NewChatDialog(props: NewChatDialogProps) {
+  const fetcher = useFetcher();
+
+  const onOpenChangeHandler = (open: boolean) => {
+    if (open) {
+      fetcher.load("/users");
+    }
+  };
+
+  const isLoading = fetcher.state === "loading";
+
   return (
-    <Dialog>
+    <Dialog {...props} onOpenChange={onOpenChangeHandler}>
       <DialogTrigger>
         <AddButton />
       </DialogTrigger>
@@ -41,7 +60,21 @@ export function NewChatDialog() {
             className="w-full rounded-lg bg-background pl-8"
           />
         </div>
-        <div className="grid gap-4 max-h-[400px] overflow-auto">
+        {fetcher.data !== undefined && (
+          <div className="grid gap-4 max-h-[400px] overflow-auto">
+            <div className="grid grid-cols-[auto_1fr] items-center gap-4">
+              <Avatar>
+                <AvatarImage src="/placeholder-user.jpg" />
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+              <div className="grid gap-1">
+                <div className="font-medium">John Doe</div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isLoading && <p>loading...</p>}
+        {/*<div className="grid gap-4 max-h-[400px] overflow-auto">
           <div className="grid grid-cols-[auto_1fr] items-center gap-4">
             <Avatar>
               <AvatarImage src="/placeholder-user.jpg" />
@@ -87,7 +120,7 @@ export function NewChatDialog() {
               <div className="font-medium">Michael Chen</div>
             </div>
           </div>
-        </div>
+        </div>*/}
       </DialogContent>
     </Dialog>
   );
