@@ -22,10 +22,6 @@ CREATE TABLE "message" (
 
 CREATE TABLE "room" (
 	"id" serial PRIMARY KEY,
-	"name" varchar
-);
-
-CREATE tABLE "room_users" (
-	"user_id" int,
-	"room_id" int
+	"user_id_1" int,
+  "user_id_2" int
 );
