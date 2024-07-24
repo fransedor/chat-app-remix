@@ -29,10 +29,11 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { AddButton } from "./add-button";
 import { DialogProps } from "@radix-ui/react-dialog";
 import { useFetcher } from "@remix-run/react";
+import { loader } from "~/routes/users";
 
 interface NewChatDialogProps extends DialogProps {}
 export function NewChatDialog(props: NewChatDialogProps) {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<typeof loader>();
 
   const onOpenChangeHandler = (open: boolean) => {
     if (open) {
@@ -41,6 +42,8 @@ export function NewChatDialog(props: NewChatDialogProps) {
   };
 
   const isLoading = fetcher.state === "loading";
+  const userList = fetcher.data && fetcher.data.data;
+  const isError = fetcher.data && fetcher.data.error;
 
   return (
     <Dialog {...props} onOpenChange={onOpenChangeHandler}>
@@ -60,67 +63,23 @@ export function NewChatDialog(props: NewChatDialogProps) {
             className="w-full rounded-lg bg-background pl-8"
           />
         </div>
-        {fetcher.data !== undefined && (
-          <div className="grid gap-4 max-h-[400px] overflow-auto">
-            <div className="grid grid-cols-[auto_1fr] items-center gap-4">
-              <Avatar>
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <div className="font-medium">John Doe</div>
+
+        <div className="grid gap-4 max-h-[400px] overflow-auto">
+          {isError && <p className="text-destructive">Error when getting user list</p>}
+          {userList &&
+            userList.map((user) => (
+              <div className="grid grid-cols-[auto_1fr] items-center gap-4" key={user.id}>
+                <Avatar>
+                  <AvatarImage src="/placeholder-user.jpg" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <div className="grid gap-1">
+                  <div className="font-medium">{user.username}</div>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            ))}
+        </div>
         {isLoading && <p>loading...</p>}
-        {/*<div className="grid gap-4 max-h-[400px] overflow-auto">
-          <div className="grid grid-cols-[auto_1fr] items-center gap-4">
-            <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <div className="font-medium">John Doe</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-[auto_1fr] items-center gap-4">
-            <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>JS</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <div className="font-medium">Jane Smith</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-[auto_1fr] items-center gap-4">
-            <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>BJ</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <div className="font-medium">Bob Johnson</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-[auto_1fr] items-center gap-4">
-            <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>SL</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <div className="font-medium">Sarah Lee</div>
-            </div>
-          </div>
-          <div className="grid grid-cols-[auto_1fr] items-center gap-4">
-            <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>MC</AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <div className="font-medium">Michael Chen</div>
-            </div>
-          </div>
-        </div>*/}
       </DialogContent>
     </Dialog>
   );

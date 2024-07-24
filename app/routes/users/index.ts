@@ -3,15 +3,20 @@ import { getAllUsers } from "~/repository/user/getAllUsers";
 
 export async function loader() {
   try {
-    throw new Error("error");
     const users = await getAllUsers();
     return json({
       data: users,
+      error: null,
+      status: 200
     });
-  } catch(err) {
-    return json({
-      data: null
-    })
-    throw new Error("error");
+  } catch (err) {
+    return json(
+      {
+        data: null,
+        error: (err as Error).message,
+        status: 500
+      },
+      { status: 500 }
+    );
   }
 }
