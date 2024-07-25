@@ -3,7 +3,6 @@ import { NewChatDialog } from "@/components/component/new-chat-dialog";
 import Searchbar from "@/components/component/searchbar";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
-import { getSession } from "~/utils/session.server";
 //import { useEffect, useState } from "react";
 //import { io } from "socket.io-client";
 //import LogOutButton from "~/components/LogOutButton";
@@ -11,14 +10,10 @@ import { getSession } from "~/utils/session.server";
 //const socket = io("http://localhost:3000");
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("cookie"));
-  if (session.has("userId")) {
-    return session.get("userId");
+  const sessionId = await getUserIdFromSession(request);
+  if (sessionId === 0) {
+    throw redirect("/login");
   }
-  console.log("curr session id", session.get("userId"));
-  //if (sessionId === 0) {
-  //  throw redirect("/login");
-  //}
   return null
 };
 
