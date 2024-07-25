@@ -3,4 +3,5 @@ export interface UserInterface {
 	username: string;
 	password: string;
 	created_at: string;
+  role: "admin" | "publc";
 }

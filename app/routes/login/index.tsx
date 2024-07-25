@@ -8,9 +8,17 @@ import { LoginForm } from "@/components/component/login-form";
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("cookie"));
   if (session.has("userId")) {
+    // Redirect to the home page if they are already signed in.
     return redirect("/");
   }
-  return json({});
+
+  const data = { error: session.get("error") };
+
+  return json(data, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -35,7 +43,6 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (bcrypt.compareSync(password, userPassword)) {
     const session = await getSession();
-    console.log("curr users", session);
     session.set("userId", users[0].id);
 
     return redirect("/", {

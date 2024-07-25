@@ -1,12 +1,25 @@
+import { useFetcher } from "@remix-run/react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { UserInterface } from "~/repository/models/user";
 
 interface UserOptionProps {
   user: Pick<UserInterface, "id" | "username">;
 }
+
 const UserOption = ({ user }: UserOptionProps) => {
+  const fetcher = useFetcher();
+
+  const handleCreateRoomWithUser = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("chattedId", user.id);
+    fetcher.submit(formData, { method: "post", action: "/room/add" });
+  };
+
+
+  
   return (
-    <div className="grid grid-cols-[auto_1fr] items-center gap-4" key={user.id}>
+    <button className="flex items-center gap-4" key={user.id} onClick={handleCreateRoomWithUser}>
       <Avatar>
         <AvatarImage src="/placeholder-user.jpg" />
         <AvatarFallback>JD</AvatarFallback>
@@ -14,7 +27,7 @@ const UserOption = ({ user }: UserOptionProps) => {
       <div className="grid gap-1">
         <div className="font-medium">{user.username}</div>
       </div>
-    </div>
+    </button>
   );
 };
 

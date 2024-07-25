@@ -25,11 +25,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { AddButton } from "./add-button";
 import { DialogProps } from "@radix-ui/react-dialog";
 import { useFetcher } from "@remix-run/react";
 import { loader } from "~/routes/users";
+import UserOption from "./user-option";
 
 interface NewChatDialogProps extends DialogProps {}
 export function NewChatDialog(props: NewChatDialogProps) {
@@ -66,18 +66,7 @@ export function NewChatDialog(props: NewChatDialogProps) {
 
         <div className="grid gap-4 max-h-[400px] overflow-auto">
           {isError && <p className="text-destructive">Error when getting user list</p>}
-          {userList &&
-            userList.map((user) => (
-              <div className="grid grid-cols-[auto_1fr] items-center gap-4" key={user.id}>
-                <Avatar>
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="font-medium">{user.username}</div>
-                </div>
-              </div>
-            ))}
+          {userList && userList.map((user) => <UserOption user={user} key={user.id} />)}
         </div>
         {isLoading && <p>loading...</p>}
       </DialogContent>

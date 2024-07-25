@@ -4,7 +4,7 @@ import { UserInterface } from "../models/user";
 
 export const getUserByUsername = async (username: string) => {
   try {
-    const res = (await query("SELECT password, role FROM users WHERE username=$1", [
+    const res = (await query("SELECT id, username, password, role FROM users WHERE username=$1", [
       username,
     ])) as QueryResult<Omit<UserInterface, "created_at">>;
 
