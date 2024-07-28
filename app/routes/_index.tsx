@@ -19,9 +19,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
   try {
     const chatList = await ChatService.getChatList(userId);
-    return json({ chats: chatList });
+    return json({ chats: chatList, currentuserId: userId, error: null });
   } catch (err) {
-    return json({ error: (err as Error).message }, { status: 500 });
+    return json(
+      { error: (err as Error).message, chats: null, currentUserId: userId },
+      { status: 500 }
+    );
   }
 };
 
@@ -46,7 +49,7 @@ export default function Index() {
   //};
 
   const data = useLoaderData<typeof loader>();
-	console.log(data);
+  console.log(data);
   return (
     <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">
       <div className="flex flex-col border-r bg-background sticky top-0 left-0 max-h-screen">
@@ -54,8 +57,8 @@ export default function Index() {
           <Searchbar />
           <NewChatDialog />
         </div>
-        <ChatContainer chats={[]} />
-				<LogOutButton />
+        {data.chats && <ChatContainer chats={data.chats} currentUserId={data.currentuserId} />}
+        <LogOutButton />
       </div>
       <div className="flex items-center justify-center">
         <p className="text-primary">Select someone to chat with from the list on the left</p>

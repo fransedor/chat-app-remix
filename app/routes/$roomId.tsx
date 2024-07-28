@@ -21,9 +21,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
   try {
     const chatList = await ChatService.getChatList(userId);
-    return json({ chats: chatList });
+    return json({ chats: chatList, currentuserId: userId, error: null });
   } catch (err) {
-    return json({ error: (err as Error).message }, { status: 500 });
+    return json(
+      { error: (err as Error).message, chats: null, currentUserId: userId },
+      { status: 500 }
+    );
   }
 };
 
@@ -57,7 +60,7 @@ export default function Index() {
           <Searchbar />
           <NewChatDialog />
         </div>
-        <ChatContainer chats={[]} />
+        {data.chats && <ChatContainer chats={data.chats} currentUserId={data.currentuserId} />}
         <LogOutButton />
       </div>
       <div className="flex flex-col max-h-screen">

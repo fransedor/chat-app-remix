@@ -1,6 +1,7 @@
 export interface Chat {
-	user_id_1: string;
-	user_id_2: string;
+	room_id: number;
+	user_id_1: number;
+	user_id_2: number;
 	username_1: string;
 	username_2: string;
 	last_message: string;

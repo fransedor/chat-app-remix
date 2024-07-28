@@ -1,9 +1,30 @@
+import { Chat } from "~/repository/models/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-interface ChatRoomProps {
+interface ChatRoomProps extends Chat {
   roomId: string;
+	currentUserId: number;
 }
-const ChatRoom = ({ roomId }: ChatRoomProps) => {
+const ChatRoom = ({
+  roomId,
+  currentUserId,
+  user_id_1,
+  user_id_2,
+  username_1,
+  username_2,
+  last_message,
+  last_message_timestamp,
+}: ChatRoomProps) => {
+  const getChatUsername = () => {
+    // Self chat
+    if (currentUserId === user_id_1 && currentUserId === user_id_2) {
+      return username_1;
+    } else if (currentUserId === user_id_1) {
+      return username_2;
+    } else {
+      return username_1;
+    }
+  };
   return (
     <a
       href={`/${roomId}`}
@@ -14,14 +35,10 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
       <div className="flex-1 overflow-hidden">
-        <div className="font-medium truncate">John Doe</div>
-        <div className="text-sm text-muted-foreground truncate">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores quam numquam, reiciendis
-          enim voluptates necessitatibus eius totam libero repudiandae delectus accusantium illum
-          porro, nostrum a corporis doloremque, inventore unde repellat?
-        </div>
+        <div className="font-medium truncate">{getChatUsername()}</div>
+        <div className="text-sm text-muted-foreground truncate">{last_message}</div>
       </div>
-      <div className="text-xs text-muted-foreground">2:39 PM</div>
+      <div className="text-xs text-muted-foreground">{last_message_timestamp}</div>
     </a>
   );
 };
