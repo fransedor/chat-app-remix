@@ -1,12 +1,9 @@
-import ChatContainer from "@/components/component/chat-container";
 import ChatHeader from "@/components/component/chat-header";
 import ChatMessage from "@/components/component/chat-message";
-import { NewChatDialog } from "@/components/component/new-chat-dialog";
 import NewMessage from "@/components/component/new-message";
-import Searchbar from "@/components/component/searchbar";
+import Sidebar from "@/components/component/sidebar";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import LogOutButton from "~/components/LogOutButton";
 import ChatService from "~/service/chat.service";
 import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
 //import { useEffect, useState } from "react";
@@ -21,7 +18,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
   try {
     const chatList = await ChatService.getChatList(userId);
-    return json({ chats: chatList, currentuserId: userId, error: null });
+    return json({ chats: chatList, currentUserId: userId, error: null });
   } catch (err) {
     return json(
       { error: (err as Error).message, chats: null, currentUserId: userId },
@@ -55,14 +52,7 @@ export default function Index() {
 
   return (
     <div className="grid h-screen w-full grid-cols-[300px_1fr] bg-background">
-      <div className="flex flex-col border-r bg-background sticky top-0 left-0 max-h-screen">
-        <div className="flex items-center justify-between border-b pr-2">
-          <Searchbar />
-          <NewChatDialog />
-        </div>
-        {data.chats && <ChatContainer chats={data.chats} currentUserId={data.currentuserId} />}
-        <LogOutButton />
-      </div>
+      <Sidebar chats={data.chats} currentUserId={data.currentUserId} />
       <div className="flex flex-col max-h-screen">
         <ChatHeader />
         <div className="flex-1 overflow-auto p-6">
