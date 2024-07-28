@@ -6,12 +6,8 @@ import { getUserByUsername } from "~/repository/user/getUserByUsername";
 import bcrypt from "bcrypt";
 import { LoginForm } from "@/components/component/login-form";
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("cookie"));
-  if (session.has("userId")) {
-    return redirect("/");
-  }
-  return json({});
+export const loader: LoaderFunction = async () => {
+  return null
 };
 
 export const action: ActionFunction = async ({ request }) => {

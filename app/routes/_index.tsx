@@ -1,7 +1,10 @@
 import ChatContainer from "@/components/component/chat-container";
 import { NewChatDialog } from "@/components/component/new-chat-dialog";
 import Searchbar from "@/components/component/searchbar";
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import LogOutButton from "~/components/LogOutButton";
+import ChatService from "~/service/chat.service";
 import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
 //import { useEffect, useState } from "react";
 //import { io } from "socket.io-client";
@@ -10,11 +13,16 @@ import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
 //const socket = io("http://localhost:3000");
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const sessionId = await getUserIdFromSession(request);
-  if (sessionId === 0) {
+  const userId = await getUserIdFromSession(request);
+  if (userId === 0) {
     throw redirect("/login");
   }
-  return null
+  try {
+    const chatList = await ChatService.getChatList(userId);
+    return json({ chats: chatList });
+  } catch (err) {
+    return json({ error: (err as Error).message }, { status: 500 });
+  }
 };
 
 export default function Index() {
@@ -37,8 +45,8 @@ export default function Index() {
   //  setMessage("");
   //};
 
-  //const data = useLoaderData<typeof loader>();
-
+  const data = useLoaderData<typeof loader>();
+	console.log(data);
   return (
     <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">
       <div className="flex flex-col border-r bg-background sticky top-0 left-0 max-h-screen">
@@ -47,6 +55,7 @@ export default function Index() {
           <NewChatDialog />
         </div>
         <ChatContainer chats={[]} />
+				<LogOutButton />
       </div>
       <div className="flex items-center justify-center">
         <p className="text-primary">Select someone to chat with from the list on the left</p>
