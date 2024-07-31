@@ -1,5 +1,6 @@
 import { Chat } from "~/repository/models/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import dayjs from "dayjs";
 
 interface ChatRoomProps extends Chat {
   roomId: string;
@@ -25,6 +26,19 @@ const ChatRoom = ({
       return username_1;
     }
   };
+  
+  const getLastMessageTimestamp = () => {
+    const timestampAsDayJs = dayjs(last_message_timestamp);
+    // Is Today
+    if (timestampAsDayJs.isSame(dayjs())) {
+      return timestampAsDayJs.format("HH:mm")
+      // Is yesterday
+    } else if (timestampAsDayJs.isSame(dayjs().subtract(1, 'day'))) {
+      return "Yesterday"
+    } else {
+      return timestampAsDayJs.format("DD/MM/YYYY");
+    }
+  }
   return (
     <a
       href={`/${roomId}`}
@@ -38,7 +52,7 @@ const ChatRoom = ({
         <div className="font-medium truncate">{getChatUsername()}</div>
         <div className="text-sm text-muted-foreground truncate">{last_message}</div>
       </div>
-      <div className="text-xs text-muted-foreground">{last_message_timestamp}</div>
+      <div className="text-xs text-muted-foreground">{getLastMessageTimestamp()}</div>
     </a>
   );
 };
