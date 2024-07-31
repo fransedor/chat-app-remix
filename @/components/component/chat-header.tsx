@@ -5,7 +5,10 @@ import VideoIcon from "../icons/Video";
 import MoveHorizontalIcon from "../icons/MoveHorizontal";
 import ArrowLeftIcon from "../icons/ArrowLeft";
 
-const ChatHeader = () => {
+interface ChatHeaderProps {
+  chattedUsername: string;
+}
+const ChatHeader = ({ chattedUsername }: ChatHeaderProps) => {
   return (
     <div className="flex sticky top-0 z-50 items-center justify-between border-b bg-muted px-6 py-4">
       <div className="flex items-center gap-3">
@@ -17,7 +20,7 @@ const ChatHeader = () => {
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div>
-          <div className="font-medium">John Doe</div>
+          <div className="font-medium">{chattedUsername}</div>
           <div className="text-sm text-muted-foreground">Online</div>
         </div>
       </div>

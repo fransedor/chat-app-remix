@@ -6,6 +6,7 @@ import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import ChatService from "~/service/chat.service";
 import MessageService from "~/service/message.service";
+import RoomService from "~/service/room.service";
 import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
 //import { useEffect, useState } from "react";
 //import { io } from "socket.io-client";
@@ -20,11 +21,24 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   }
   try {
     const chatList = await ChatService.getChatList(userId);
+    const roomWithUsersData = await RoomService.getUsernamesByRoomId(roomId!);
     const messages = await MessageService.getMessageOfRoom(roomId!);
-    return json({ chats: chatList, messages, currentUserId: userId, error: null });
+    return json({
+      chats: chatList,
+      messages,
+      roomWithUsersData,
+      currentUserId: userId,
+      error: null,
+    });
   } catch (err) {
     return json(
-      { error: (err as Error).message, messages: null, chats: null, currentUserId: userId },
+      {
+        error: (err as Error).message,
+        messages: null,
+        roomWithUsersData: null,
+        chats: null,
+        currentUserId: userId,
+      },
       { status: 500 }
     );
   }
@@ -52,12 +66,19 @@ export default function Index() {
 
   const data = useLoaderData<typeof loader>();
   console.log(data);
+  if (data.error !== null) {
+    return <div>Something went wrong</div>;
+  }
+
+  const chattedUser = data.roomWithUsersData.users.find(
+    (user) => user.id !== data.currentUserId
+  )
 
   return (
     <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">
       <Sidebar chats={data.chats} currentUserId={data.currentUserId} />
       <div className="flex flex-col max-h-screen">
-        <ChatHeader />
+        <ChatHeader chattedUsername={chattedUser ? chattedUser.username : data.roomWithUsersData.users[0].username} />
         <ChatMessageContainer messages={data.messages} currentUserId={data.currentUserId} />
         <NewMessage />
       </div>
