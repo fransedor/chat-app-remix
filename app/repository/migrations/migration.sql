@@ -18,6 +18,7 @@ CREATE TABLE "message" (
 	"text" varchar,
 	"media_url" varchar,
 	"created_at" timestamp
+  "username" varchar
 );
 
 CREATE TABLE "room" (

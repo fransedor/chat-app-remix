@@ -5,4 +5,5 @@ export interface Message {
   text: string;
   media_url: string | null;
   created_at: string;
+  username: string;
 }

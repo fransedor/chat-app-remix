@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 interface ChatMessageProps extends Message {
   isUser: boolean;
 }
-const ChatMessage = ({ isUser, text, created_at }: ChatMessageProps) => {
+const ChatMessage = ({ isUser, text, created_at, username }: ChatMessageProps) => {
   return (
     <div className={`flex items-start ${isUser && "justify-end"}`}>
       <div className={`${isUser ? "flex-row-reverse" : "flex-row"} flex gap-4`}>
@@ -18,7 +18,7 @@ const ChatMessage = ({ isUser, text, created_at }: ChatMessageProps) => {
             isUser ? "bg-primary text-primary-foreground" : "bg-muted/50"
           }`}
         >
-          <div className="font-medium">John Doe</div>
+          <div className="font-medium">{username}</div>
           <div>{text}</div>
           <div
             className={`text-xs ${isUser ? "text-primary-foreground" : "text-muted-foreground"}`}
