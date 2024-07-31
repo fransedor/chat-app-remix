@@ -1,5 +1,5 @@
 import ChatHeader from "@/components/component/chat-header";
-import ChatMessage from "@/components/component/chat-message";
+import ChatMessageContainer from "@/components/component/chat-message-container";
 import NewMessage from "@/components/component/new-message";
 import Sidebar from "@/components/component/sidebar";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
@@ -58,18 +58,7 @@ export default function Index() {
       <Sidebar chats={data.chats} currentUserId={data.currentUserId} />
       <div className="flex flex-col max-h-screen">
         <ChatHeader />
-        <div className="flex-1 overflow-auto p-6">
-          <div className="grid gap-4">
-            <ChatMessage isUser={false} />
-            <ChatMessage isUser />
-            <ChatMessage isUser />
-            <ChatMessage isUser />
-            <ChatMessage isUser />
-            <ChatMessage isUser />
-            <ChatMessage isUser />
-            <ChatMessage isUser />
-          </div>
-        </div>
+        <ChatMessageContainer messages={data.messages} currentUserId={data.currentUserId} />
         <NewMessage />
       </div>
     </div>
