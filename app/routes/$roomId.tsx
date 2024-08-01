@@ -1,9 +1,7 @@
-import ChatHeader from "@/components/component/chat-header";
-import ChatMessageContainer from "@/components/component/chat-message-container";
-import NewMessage from "@/components/component/new-message";
 import Sidebar from "@/components/component/sidebar";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import ChatSection from "~/components/ChatSection";
 import ChatService from "~/service/chat.service";
 import MessageService from "~/service/message.service";
 import RoomService from "~/service/room.service";
@@ -65,23 +63,25 @@ export default function Index() {
   //};
 
   const data = useLoaderData<typeof loader>();
-  console.log(data);
   if (data.error !== null) {
     return <div>Something went wrong</div>;
   }
 
-  const chattedUser = data.roomWithUsersData.users.find(
-    (user) => user.id !== data.currentUserId
-  )
+  const chattedUser = data.roomWithUsersData.users.find((user) => user.id !== data.currentUserId);
+  const currentUser = data.roomWithUsersData.users.find((user) => user.id === data.currentUserId);
 
   return (
     <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">
       <Sidebar chats={data.chats} currentUserId={data.currentUserId} />
-      <div className="flex flex-col max-h-screen">
-        <ChatHeader chattedUsername={chattedUser ? chattedUser.username : data.roomWithUsersData.users[0].username} />
-        <ChatMessageContainer messages={data.messages} currentUserId={data.currentUserId} />
-        <NewMessage />
-      </div>
+      <ChatSection
+        currentUserId={data.currentUserId}
+        messages={data.messages}
+        chattedUsername={
+          // Check if user chat with himself
+          chattedUser ? chattedUser.username : data.roomWithUsersData.users[0].username
+        }
+        currentUsername={currentUser?.username || ""}
+      />
     </div>
   );
 }
