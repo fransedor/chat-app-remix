@@ -1,16 +1,12 @@
 import Sidebar from "@/components/component/sidebar";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useParams } from "@remix-run/react";
 import ChatSection from "~/components/ChatSection";
 import ChatService from "~/service/chat.service";
 import MessageService from "~/service/message.service";
 import RoomService from "~/service/room.service";
 import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
-//import { useEffect, useState } from "react";
-//import { io } from "socket.io-client";
-//import LogOutButton from "~/components/LogOutButton";
 
-//const socket = io("http://localhost:3000");
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { roomId } = params;
   const userId = await getUserIdFromSession(request);
@@ -43,24 +39,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 };
 
 export default function Index() {
-  //const [messages, setMessages] = useState<string[]>([]);
-  //const [message, setMessage] = useState("");
-
-  //useEffect(() => {
-  //  socket.on("message", (message) => {
-  //    setMessages((prevMessages) => [...prevMessages, message]);
-  //  });
-
-  //  return () => {
-  //    socket.off("message");
-  //  };
-  //}, []);
-
-  //const sendMessage = () => {
-  //  console.log("sending message");
-  //  socket.emit("sendMessage", message);
-  //  setMessage("");
-  //};
+  const { roomId } = useParams();
 
   const data = useLoaderData<typeof loader>();
   if (data.error !== null) {
@@ -76,6 +55,7 @@ export default function Index() {
       <ChatSection
         currentUserId={data.currentUserId}
         messages={data.messages}
+        roomId={roomId!}
         chattedUsername={
           // Check if user chat with himself
           chattedUser ? chattedUser.username : data.roomWithUsersData.users[0].username
