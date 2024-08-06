@@ -1,6 +1,7 @@
 import ChatHeader from "@/components/component/chat-header";
 import ChatMessageContainer from "@/components/component/chat-message-container";
 import NewMessage from "@/components/component/new-message";
+import { Form } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Message } from "~/repository/models/message";
@@ -42,7 +43,6 @@ const ChatSection = ({
 
   useEffect(() => {
     socket.emit("joinRoom", roomId);
-    console.log("use effect ran")
     socket.on("message-server", ({ message }) => {
       console.log("Received message: ", message);
       if (message.user_id !== currentUserId) {
@@ -57,11 +57,13 @@ const ChatSection = ({
   }, [roomId, currentUserId]);
 
   return (
-    <div className="flex flex-col max-h-screen">
-      <ChatHeader chattedUsername={chattedUsername} />
-      <ChatMessageContainer messages={messagesState} currentUserId={currentUserId} />
-      <NewMessage onSend={handleSendNewMessage} />
-    </div>
+    <Form method="POST" action="/api/message">
+      <div className="flex flex-col h-screen">
+        <ChatHeader chattedUsername={chattedUsername} />
+        <ChatMessageContainer messages={messagesState} currentUserId={currentUserId} />
+        <NewMessage onSend={handleSendNewMessage} />
+      </div>
+    </Form>
   );
 };
 

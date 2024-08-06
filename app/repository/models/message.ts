@@ -7,3 +7,5 @@ export interface Message {
   created_at: string;
   username: string;
 }
+
+export type AddNewMessageQueryArgs = Omit<Message, "id" | "created_at">;

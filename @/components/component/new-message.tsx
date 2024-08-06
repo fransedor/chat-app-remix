@@ -24,6 +24,7 @@ const NewMessage = ({ onSend }: NewMessageProps) => {
         className="flex-1 rounded-lg bg-muted px-4 py-2 text-sm"
         value={inputtedMessage}
         onChange={(e) => setInputtedMessage(e.target.value)}
+        name="text"
       />
       <Button className="shrink-0" onClick={handleSendNewMessage}>
         <SendIcon className="h-4 w-4" />
