@@ -6,21 +6,10 @@ export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
     return createResponse(null, "method not allowed", 405);
   }
-  const formData = await request.formData();
-  const text = String(formData.get("text"));
-  //const media_url = String(formData.get("media_url"));
+  const messageBody = await request.json();
 
-  if (!text) {
-    return;
-  }
   try {
-    await MessageRepository.AddNewMessage({
-      text,
-      media_url: "",
-      room_id: "",
-      user_id: "",
-      username: "",
-    });
+    await MessageRepository.AddNewMessage(messageBody);
     return createResponse("success", null, 200);
   } catch (err) {
     return createResponse(null, (err as Error).message, 500);

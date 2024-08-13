@@ -1,7 +1,6 @@
 import ChatHeader from "@/components/component/chat-header";
 import ChatMessageContainer from "@/components/component/chat-message-container";
 import NewMessage from "@/components/component/new-message";
-import { Form } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Message } from "~/repository/models/message";
@@ -24,7 +23,7 @@ const ChatSection = ({
 }: ChatSectionProps) => {
   const [messagesState, setMessagesState] = useState(messages);
 
-  const handleSendNewMessage = (message: string) => {
+  const handleSendNewMessage = async (message: string) => {
     const messageObj = {
       created_at: new Date().toISOString(),
       id: Math.ceil(Math.random() * Math.pow(2, 31)),
@@ -34,6 +33,10 @@ const ChatSection = ({
       user_id: currentUserId,
       username: currentUsername,
     };
+    await fetch("/api/message", {
+      body: JSON.stringify(messageObj),
+      method: "POST",
+    });
     socket.emit("message-client", {
       roomId,
       message: messageObj,
@@ -57,13 +60,13 @@ const ChatSection = ({
   }, [roomId, currentUserId]);
 
   return (
-    <Form method="POST" action="/api/message">
-      <div className="flex flex-col h-screen">
-        <ChatHeader chattedUsername={chattedUsername} />
-        <ChatMessageContainer messages={messagesState} currentUserId={currentUserId} />
-        <NewMessage onSend={handleSendNewMessage} />
-      </div>
-    </Form>
+    //<Form method="POST" action="/api/message" navigate={false}>
+    <div className="flex flex-col h-screen">
+      <ChatHeader chattedUsername={chattedUsername} />
+      <ChatMessageContainer messages={messagesState} currentUserId={currentUserId} />
+      <NewMessage onSend={handleSendNewMessage} />
+    </div>
+    //</Form>
   );
 };
 
