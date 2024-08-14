@@ -28,14 +28,18 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "@remix-run/react";
 
-export function LoginForm({ error, type }: { error: string, type: "Login" | "Register" }) {
+export function LoginForm({ error, type }: { error: string; type: "Login" | "Register" }) {
   return (
     <div className="flex items-center justify-center h-screen">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">{type}</CardTitle>
-          <CardDescription>Enter your email and password to {type === "Login" ? "access" : "register"} your account.</CardDescription>
+          <CardDescription>
+            Enter your email and password to {type === "Login" ? "access" : "register"} your
+            account.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -47,9 +51,22 @@ export function LoginForm({ error, type }: { error: string, type: "Login" | "Reg
             <Input id="password" name="password" type="password" required />
           </div>
           {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+          <div className="space-y-2">
+            <Button className="w-full mt-4" type="submit">
+              {type === "Login" ? "Sign In" : "Register"}
+            </Button>
+          </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" type="submit">{type === "Login" ? "Sign In" : "Register"}</Button>
+          <p className="mx-auto text-sm">
+            {type === "Login" ? "New user? " : "Already have an account? "}{" "}
+            <Link
+              to={type === "Login" ? "/register" : "/login"}
+              className="hover:underline font-bold"
+            >
+              {type === "Login" ? "Sign up" : "Login"}
+            </Link>
+          </p>
         </CardFooter>
       </Card>
     </div>
