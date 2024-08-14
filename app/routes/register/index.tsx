@@ -34,6 +34,7 @@ export const action: ActionFunction = async ({ request }) => {
   const userId = await createNewUser(username, hashedPassword);
   const session = await getSession();
   session.set("userId", userId);
+  session.set("username", username);
 
   return redirect("/", {
     headers: {

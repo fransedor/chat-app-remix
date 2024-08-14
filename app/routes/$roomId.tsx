@@ -5,11 +5,11 @@ import ChatSection from "~/components/ChatSection";
 import ChatService from "~/service/chat.service";
 import MessageService from "~/service/message.service";
 import RoomService from "~/service/room.service";
-import { getUserIdFromSession } from "~/utils/getUserIdFromSession";
+import { getUserFromSession } from "~/utils/getUserFromSession";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { roomId } = params;
-  const userId = await getUserIdFromSession(request);
+  const { userId, username } = await getUserFromSession(request);
   if (userId === 0) {
     throw redirect("/login");
   }
@@ -22,6 +22,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       messages,
       roomWithUsersData,
       currentUserId: userId,
+      currentUsername: username,
       error: null,
     });
   } catch (err) {
@@ -32,6 +33,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         roomWithUsersData: null,
         chats: null,
         currentUserId: userId,
+        currentUsername: username,
       },
       { status: 500 }
     );
@@ -47,20 +49,19 @@ export default function Index() {
   }
 
   const chattedUser = data.roomWithUsersData.users.find((user) => user.id !== data.currentUserId);
-  const currentUser = data.roomWithUsersData.users.find((user) => user.id === data.currentUserId);
 
   return (
     <div className="grid h-screen w-full grid-cols-[400px_1fr] bg-background">
-      <Sidebar chats={data.chats} currentUserId={data.currentUserId} />
+      <Sidebar chats={data.chats} currentUserId={data.currentUserId} currentUsername={data.currentUsername} />
       <ChatSection
         currentUserId={data.currentUserId}
         messages={data.messages}
         roomId={roomId!}
         chattedUsername={
           // Check if user chat with himself
-          chattedUser ? chattedUser.username : data.roomWithUsersData.users[0].username
+          chattedUser ? chattedUser.username : data.currentUsername
         }
-        currentUsername={currentUser?.username || ""}
+        currentUsername={data.currentUsername || ""}
       />
     </div>
   );

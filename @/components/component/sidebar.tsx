@@ -7,8 +7,9 @@ import ProfileWrapper from "./profile-wrapper";
 interface SidebarProps {
   chats: Chat[] | null;
   currentUserId: number;
+  currentUsername: string;
 }
-const Sidebar = ({ chats, currentUserId }: SidebarProps) => {
+const Sidebar = ({ chats, currentUserId, currentUsername }: SidebarProps) => {
   return (
     <div className="flex justify-between flex-col border-r bg-background sticky top-0 left-0 max-h-screen w-[400px]">
       <div>
@@ -18,7 +19,7 @@ const Sidebar = ({ chats, currentUserId }: SidebarProps) => {
         </div>
         {chats && <ChatContainer chats={chats} currentUserId={currentUserId} />}
       </div>
-      <ProfileWrapper username="test"/>
+      <ProfileWrapper username={currentUsername} />
     </div>
   );
 };

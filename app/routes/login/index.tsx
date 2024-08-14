@@ -44,6 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (bcrypt.compareSync(password, userPassword)) {
     const session = await getSession();
     session.set("userId", users[0].id);
+    session.set("username", username);
 
     return redirect("/", {
       headers: {
